@@ -1,4 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+float calculate_distance(float x, float y, float z, float w) {
+   return sqrt(pow(z - x,2) + pow(w-y,2));
+}
 
 int main(int argc, char **argv) {
     
@@ -17,7 +23,7 @@ int main(int argc, char **argv) {
     double coordinate_z;
     double coordinate_w;
 
-    double min_distance;
+    double min_distance = 999999999999999;
 
     input_file = fopen(argv[1], "r");
 
@@ -42,8 +48,15 @@ int main(int argc, char **argv) {
             fscanf(input_file, "%lf", &coordinate_z);
             fscanf(input_file, "%lf", &coordinate_w);
 
+            double this_distance = calculate_distance(coordinate_x, coordinate_y, coordinate_z, coordinate_w);
+
+            if ((this_distance != 0) && (this_distance < min_distance)) {
+                min_distance = this_distance;
+            }
+
             printf("\t %.15f ", coordinate_z);
-            printf("\t %.15f \n", coordinate_w);
+            printf("\t %.15f ", coordinate_w);
+            printf("\t %.15f \n", min_distance);
         }
 
         fseek(input_file, next_check, SEEK_SET);
