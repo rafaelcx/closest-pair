@@ -2,6 +2,7 @@
 #include <cfloat>
 #include <cstdlib>
 #include <cmath>
+#include <time.h>
 
 using namespace std;
  
@@ -33,7 +34,7 @@ float bruteForceResult(Point P[], int tamanho) {
     
     for (int i = 0; i < tamanho; ++i){
         for (int j = i + 1; j < tamanho; ++j){
-            printf("x %d y %d \n", i, j);
+            
         }       
     }
 
@@ -62,66 +63,75 @@ float findClosestDistance(Point Px[], Point Py[], int n){
         return bruteForceResult(Px, n);
     
     int mid = n / 2;
+
     Point midPoint = Px[mid];
-    Point Pyl[mid + 1];
-    Point Pyr[n - mid - 1];
+    Point pyl[mid + 1];
+    Point pyr[n - mid - 1];
+    
     int li = 0, ri = 0;
-    for (int i = 0; i < n; i++)
-    {
-        if (Py[i].x <= midPoint.x)
-            Pyl[li++] = Py[i];
-        else
-            Pyr[ri++] = Py[i];
+    
+    for (int i = 0; i < n; i++) {
+        if (Py[i].x <= midPoint.x) {
+            pyl[li++] = Py[i];
+        } else {
+            pyr[ri++] = Py[i];
+        }
     }
-    float dl = findClosestDistance(Px, Pyl, mid);
-    float dr = findClosestDistance(Px + mid, Pyr, n-mid);
+
+    float dl = findClosestDistance(Px, pyl, mid);
+    float dr = findClosestDistance(Px + mid, pyr, n-mid);
+
+
     float d = min(dl, dr);
+    
     Point strip[n];
     int j = 0;
-    for (int i = 0; i < n; i++)
-    {
+    for (int i = 0; i < n; i++) {
         if (abs(Py[i].x - midPoint.x) < d)
             strip[j] = Py[i], j++;
     }
+
     return min(d, stripClosest(strip, j, d));
 }
 
-
-Point *merge(Point *lista_pontos, int esquerda, int meio, int direita, int eixo){
-    int n1 = meio - esquerda + 1;
-    int n2 = direita - meio;
-    Point *pontos_esq = (Point *) calloc (n1, sizeof(Point *));
-    Point *pontos_dir = (Point *) calloc (n2, sizeof(Point *));
+Point *merge(Point *coordinate_list, int left, int middle, int right, int axis) {
     
-    int index_esquerda, index_direita;
+    int n1 = middle - left + 1;
+    int n2 = right - middle;
+    
+    Point *left_points = (Point *) calloc (n1, sizeof(Point *));
+    Point *right_points = (Point *) calloc (n2, sizeof(Point *));
+    
+    int index_left, index_right;
 
-    for ( index_esquerda = 0; index_esquerda < n1; index_esquerda++)
-        pontos_esq[index_esquerda] = lista_pontos[esquerda + index_esquerda];
+    for (index_left = 0; index_left < n1; index_left++)
+        left_points[index_left] = coordinate_list[left + index_left];
 
-    for ( index_direita = 0; index_direita < n2; index_direita++)
-        pontos_dir[index_direita] = lista_pontos[meio + 1 + index_direita];
+    for (index_right = 0; index_right < n2; index_right++)
+        right_points[index_right] = coordinate_list[middle + 1 + index_right];
 
     int i = 0; 
     int j = 0; 
-    int k = esquerda; 
+    int k = left;
+
     while (i < n1 && j < n2) {
         
-        if(eixo == 0 ){
-          if (pontos_esq[i].x <= pontos_dir[j].x) {
-              lista_pontos[k] = pontos_esq[i];
+        if(axis == 0 ) {
+
+          if (left_points[i].x <= right_points[j].x) {
+              coordinate_list[k] = left_points[i];
               i++;
-          }
-          else {
-              lista_pontos[k] = pontos_dir[j];
+          } else {
+              coordinate_list[k] = right_points[j];
               j++;
           }
-        }else{
-          if (pontos_esq[i].y <= pontos_dir[j].y) {
-              lista_pontos[k] = pontos_esq[i];
+
+        } else {
+          if (left_points[i].y <= right_points[j].y) {
+              coordinate_list[k] = left_points[i];
               i++;
-          }
-          else {
-              lista_pontos[k] = pontos_dir[j];
+          } else {
+              coordinate_list[k] = right_points[j];
               j++;
           }
         }
@@ -130,18 +140,18 @@ Point *merge(Point *lista_pontos, int esquerda, int meio, int direita, int eixo)
     }
  
     while (i < n1) {
-        lista_pontos[k] = pontos_esq[i];
+        coordinate_list[k] = left_points[i];
         i++;
         k++;
     }
 
     while (j < n2) {
-        lista_pontos[k] = pontos_dir[j];
+        coordinate_list[k] = right_points[j];
         j++;
         k++;
     }
 
-    return lista_pontos;
+    return coordinate_list;
 }
 
 Point *mergeSort(Point *coordinate_list, int left, int right, int axis) {
@@ -162,18 +172,31 @@ Point *mergeSort(Point *coordinate_list, int left, int right, int axis) {
 
 void DivideAndConquer(Point unsorted_coordinate_list[], int n) {
 
-    Point *sorted_by_x_coordinates = (Point*) calloc(n, sizeof(Point));
-    Point *sorted_by_y_coordinates = (Point*) calloc(n, sizeof(Point));
+    clock_t t = clock();
+
+    Point *aux_list_x = (Point*) calloc(n, sizeof(Point));
+    Point *aux_list_y = (Point*) calloc(n, sizeof(Point));
     
     for (int i = 0; i < n; i++) {
-        sorted_by_x_coordinates[i] = unsorted_coordinate_list[i];
-        sorted_by_y_coordinates[i] = unsorted_coordinate_list[i];
+        aux_list_x[i] = unsorted_coordinate_list[i];
+        aux_list_y[i] = unsorted_coordinate_list[i];
     }
 
-    Point *lista_x = mergeSort(sorted_by_x_coordinates, 0, n -1, 0);
-    Point *lista_y = mergeSort(sorted_by_y_coordinates, 0, n -1, 1);
+    Point *coordinate_list_sorted_by_x = mergeSort(aux_list_x, 0, n -1, 0);
+    Point *coordinate_list_sorted_by_y = mergeSort(aux_list_y, 0, n -1, 1);
 
-    printf("The smallest distance between %d coordinates is %f \n", n, findClosestDistance(lista_x, lista_y, n));
+    float closest_distance = findClosestDistance(coordinate_list_sorted_by_x, coordinate_list_sorted_by_y, n);
+
+    // Getting the clock quantity that the algorithm took to run
+    t = clock() -t;
+    double time_taken = ((double) t) / CLOCKS_PER_SEC;
+
+    printf("\n DivideAndConquer took %.4f seconds\n", time_taken);
+    printf("\n DivideAndConquer %.4f to be the min distance between two points\n", closest_distance);
+    printf("\n DivideAndConquer %.4f to be the first point x coordinate\n", 0.00);
+    printf("\n DivideAndConquer %.4f to be the first point y coordinate\n", 0.00);
+    printf("\n DivideAndConquer %.4f to be the second point x coordinate\n", 0.00);
+    printf("\n DivideAndConquer %.4f to be the second point y coordinate\n", 0.00);
 }
  
 int main() {
