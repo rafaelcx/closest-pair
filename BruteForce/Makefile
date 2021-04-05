@@ -1,4 +1,4 @@
-# Libmath
+CC = g++
 LIBS += -lm
 
 # the executable is made from one or more object files

@@ -51,8 +51,8 @@ int main(int argc, char **argv) {
         // Storing the file pointer position for the next set of coordinates to compare
         coordinates_next_check = ftell(input_file);
 
-        printf("\n%.15f ", coordinate_x);
-        printf("%.15f \n", coordinate_y);
+        // printf("\n%.15f ", coordinate_x);
+        // printf("%.15f \n", coordinate_y);
 
         // Rewinding the file pointer to the start
         fseek(input_file, coordinates_start, SEEK_SET);
@@ -71,9 +71,9 @@ int main(int argc, char **argv) {
                 final_coordinate_w = coordinate_w;
             }
 
-            printf("\t %.15f ", coordinate_z);
-            printf("\t %.15f ", coordinate_w);
-            printf("\t %.15f \n", min_distance);
+            // printf("\t %.15f ", coordinate_z);
+            // printf("\t %.15f ", coordinate_w);
+            // printf("\t %.15f \n", min_distance);
         }
 
         // Setting the pointer to the next set of coordinates that we want to compare
