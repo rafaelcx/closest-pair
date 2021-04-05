@@ -2,9 +2,13 @@
 #include <cfloat>
 #include <cstdlib>
 #include <cmath>
+
 using namespace std;
  
-//Estrutua do ponto
+// ============================================== //
+// === Structs ================================== //
+// ============================================== //
+
 struct Point {
     float x, y;
 };
@@ -14,20 +18,16 @@ struct ClosestPoints {
     float distancia_euclidiana;
 };
 
-void imprime_pontos(Point *lista_pontos, int tamanho){
-  for(int i = 0; i < tamanho; i++){
-    printf("%f %f\n ", lista_pontos[i].x, lista_pontos[i].y);
-  }
-}
+// ============================================== //
+// ============================================== //
 
-//Calculo da distancia Euclidiana
-float distancia_euclidiana(Point primeiroPonto, Point segundoPonto){
-    return sqrt((primeiroPonto.x - segundoPonto.x) * (primeiroPonto.x - segundoPonto.x) + (primeiroPonto.y - segundoPonto.y) * (primeiroPonto.y - segundoPonto.y));
+
+float calculateEuclidianDistance(Point first_point, Point second_point) {
+    return sqrt((first_point.x - second_point.x) * (first_point.x - second_point.x) + (first_point.y - second_point.y) * (first_point.y - second_point.y));
 }
 
 // Calculo da menor distancia
-float forca_bruta(Point P[], int tamanho)
-{
+float bruteForceResult(Point P[], int tamanho) {
     float min = 100000000000000;
     ClosestPoints pontos;
     
@@ -40,24 +40,26 @@ float forca_bruta(Point P[], int tamanho)
     return min;
 }
 
-//Olha o strip
 float stripClosest(Point strip[], int size, float d){
     float min = d;
-    for (int i = 0; i < size; ++i)
-    {
-        for (int j = i + 1; j < size && (strip[j].y - strip[i].y) < min; ++j)
-        {
-            if (distancia_euclidiana(strip[i],strip[j]) < min)
-                min = distancia_euclidiana(strip[i], strip[j]);
+
+    for (int i = 0; i < size; ++i) {
+        for (int j = i + 1; (j < size) && ((strip[j].y - strip[i].y) < min); ++j) {
+
+            float this_min_distance = calculateEuclidianDistance(strip[i], strip[j]);
+            
+            if (this_min_distance < min) {
+                min = this_min_distance;
+            }
         }
     }
+
     return min;
 }
 
-//Encontra a menor distancia
-float closestUtil(Point Px[], Point Py[], int n){
+float findClosestDistance(Point Px[], Point Py[], int n){
     if (n <= 3)
-        return forca_bruta(Px, n);
+        return bruteForceResult(Px, n);
     
     int mid = n / 2;
     Point midPoint = Px[mid];
@@ -71,8 +73,8 @@ float closestUtil(Point Px[], Point Py[], int n){
         else
             Pyr[ri++] = Py[i];
     }
-    float dl = closestUtil(Px, Pyl, mid);
-    float dr = closestUtil(Px + mid, Pyr, n-mid);
+    float dl = findClosestDistance(Px, Pyl, mid);
+    float dr = findClosestDistance(Px + mid, Pyr, n-mid);
     float d = min(dl, dr);
     Point strip[n];
     int j = 0;
@@ -166,7 +168,7 @@ float closest(Point P[], int n){
     Point *lista_x = mergeSort(Px, 0, n -1, 0);
     Point *lista_y = mergeSort(Py, 0, n -1, 1);
 
-    return closestUtil(lista_x, lista_y, n);
+    return findClosestDistance(lista_x, lista_y, n);
 }
  
 int main() {
