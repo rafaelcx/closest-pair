@@ -144,29 +144,34 @@ Point *merge(Point *lista_pontos, int esquerda, int meio, int direita, int eixo)
     return lista_pontos;
 }
 
-Point *mergeSort(Point *lista_pontos, int esquerda, int direita, int eixo){
-    Point *pontos_ordenados;
-    if (esquerda < direita){
-        int meio = esquerda + (direita - esquerda) / 2;
-        mergeSort(lista_pontos, esquerda, meio, eixo);
-        mergeSort(lista_pontos, meio+1, direita, eixo);
-        pontos_ordenados = merge(lista_pontos, esquerda, meio, direita, eixo);
+Point *mergeSort(Point *coordinate_list, int left, int right, int axis) {
+    
+    Point *sorted_coordinate_list;
+
+    if (left < right) {
+        int middle = left + (right - left) / 2;
+
+        mergeSort(coordinate_list, left, middle, axis);
+        mergeSort(coordinate_list, middle + 1, right, axis);
+
+        sorted_coordinate_list = merge(coordinate_list, left, middle, right, axis);
     }
 
-    return pontos_ordenados;
+    return sorted_coordinate_list;
 }
 
-void DivideAndConquer(Point P[], int n) {
-    Point *Px = (Point*) calloc(n, sizeof(Point));
-    Point *Py =  (Point*) calloc(n, sizeof(Point));
+void DivideAndConquer(Point unsorted_coordinate_list[], int n) {
+
+    Point *sorted_by_x_coordinates = (Point*) calloc(n, sizeof(Point));
+    Point *sorted_by_y_coordinates = (Point*) calloc(n, sizeof(Point));
     
-    for (int i = 0; i < n; i++)
-    {
-        Px[i] = P[i];
-        Py[i] = P[i];
+    for (int i = 0; i < n; i++) {
+        sorted_by_x_coordinates[i] = unsorted_coordinate_list[i];
+        sorted_by_y_coordinates[i] = unsorted_coordinate_list[i];
     }
-    Point *lista_x = mergeSort(Px, 0, n -1, 0);
-    Point *lista_y = mergeSort(Py, 0, n -1, 1);
+
+    Point *lista_x = mergeSort(sorted_by_x_coordinates, 0, n -1, 0);
+    Point *lista_y = mergeSort(sorted_by_y_coordinates, 0, n -1, 1);
 
     printf("The smallest distance between %d coordinates is %f \n", n, findClosestDistance(lista_x, lista_y, n));
 }
