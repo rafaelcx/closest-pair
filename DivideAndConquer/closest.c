@@ -156,7 +156,7 @@ Point *mergeSort(Point *lista_pontos, int esquerda, int direita, int eixo){
     return pontos_ordenados;
 }
 
-float closest(Point P[], int n){
+void DivideAndConquer(Point P[], int n) {
     Point *Px = (Point*) calloc(n, sizeof(Point));
     Point *Py =  (Point*) calloc(n, sizeof(Point));
     
@@ -168,7 +168,7 @@ float closest(Point P[], int n){
     Point *lista_x = mergeSort(Px, 0, n -1, 0);
     Point *lista_y = mergeSort(Py, 0, n -1, 1);
 
-    return findClosestDistance(lista_x, lista_y, n);
+    printf("The smallest distance between %d coordinates is %f \n", n, findClosestDistance(lista_x, lista_y, n));
 }
  
 int main() {
@@ -206,7 +206,7 @@ int main() {
         coordinate_list[i] = point;
     }
 
-    printf("The smallest distance of %d is %f \n", coordinates_quantity, closest(coordinate_list, coordinates_quantity));
+    DivideAndConquer(coordinate_list, coordinates_quantity);
 
     return 0;
 }

@@ -3,7 +3,7 @@
 #include <math.h>
 #include <time.h>
 
-float calculate_distance(float x, float y, float z, float w) {
+float calculateEuclidianDistance(float x, float y, float z, float w) {
    return sqrt(pow(z - x, 2) + pow(w - y, 2));
 }
 
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
             fscanf(input_file, "%lf", &coordinate_z);
             fscanf(input_file, "%lf", &coordinate_w);
 
-            double this_distance = calculate_distance(coordinate_x, coordinate_y, coordinate_z, coordinate_w);
+            double this_distance = calculateEuclidianDistance(coordinate_x, coordinate_y, coordinate_z, coordinate_w);
 
             if ((this_distance != 0) && (this_distance < min_distance)) {
                 min_distance = this_distance;
