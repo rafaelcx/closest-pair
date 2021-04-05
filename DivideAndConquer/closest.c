@@ -5,12 +5,11 @@
 using namespace std;
  
 //Estrutua do ponto
-struct Point
-{
+struct Point {
     float x, y;
 };
 
-struct ClosestPoints{
+struct ClosestPoints {
     Point primeiro_ponto, segundo_ponto;
     float distancia_euclidiana;
 };
@@ -35,40 +34,11 @@ float forca_bruta(Point P[], int tamanho)
     for (int i = 0; i < tamanho; ++i){
         for (int j = i + 1; j < tamanho; ++j){
             printf("x %d y %d \n", i, j);
-            // printf("Ponto1 x %f Ponto1 y %f Ponto2 x %f Ponto2 y %f \n", P[i].x, P[i].y, P[j].x, P[j].y);
-            // if (distancia_euclidiana(P[i], P[j]) < min)
-            //     min = distancia_euclidiana(P[i], P[j]);
-            //     printf("Respostsdasdasda %f \n", min);
-            //     pontos.primeiro_ponto = P[i];
-            //     pontos.segundo_ponto = P[j];
-            //     pontos.distancia_euclidiana = min;
         }       
     }
-    // printf("Resposta %f \n", pontos.distancia_euclidiana);
+
     return min;
 }
-
-
-// Ponto forca_bruta(Ponto *pontos, int linhas){
-//   printf("ooo");
-//   ClosestPoints pontos;
-
-//   float distancia = 100000000;
-//   float tempo_execucao = 0;
-//   Ponto pFinal;
-
-//   for (int i = 0; i < linhas; i++){
-//     for(int j = i+1; j < linhas; j++){
-//       if(euclidiana(pontos[i].x,pontos[i].coordenada_y, pontos[j].coordenada_x, pontos[j].coordenada_y) < resposta.distancia_euclidiana){
-//         resposta.primeiro_ponto = pontos[i];
-//         resposta.segundo_ponto = pontos[j];
-//         resposta.distancia_euclidiana = euclidiana(pontos[i].coordenada_x,pontos[i].coordenada_y, pontos[j].coordenada_x, pontos[j].coordenada_y);
-//       }else if(euclidiana(pontos[i].coordenada_x,pontos[i].coordenada_y, pontos[j].coordenada_x, pontos[j].coordenada_y) == resposta.distancia_euclidiana){
-//         printf("b %f \n", resposta.distancia_euclidiana);
-//       }
-//     }
-//    }
-
 
 //Olha o strip
 float stripClosest(Point strip[], int size, float d){
